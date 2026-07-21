@@ -5,3 +5,9 @@
 - [x] Ejercicio 0.4
 - [x] Ejercicio 0.5
 - [x] Ejercicio 0.6
+
+## Parte 1.a: Introduction to React
+
+- [ ] Ejercicio 1.1
+- [ ] Ejercicio 1.2
+
