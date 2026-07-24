@@ -8,6 +8,6 @@
 
 ## Parte 1.a: Introduction to React
 
-- [ ] Ejercicio 1.1
-- [ ] Ejercicio 1.2
+- [x] Ejercicio 1.1
+- [x] Ejercicio 1.2
 
