@@ -8,20 +8,22 @@ const getPositive = (good, neutral, bad) => good / getTotal(good, neutral, bad) 
 // Componentes
 const SectionTitle = ({ text }) => <h1>{text}</h1>
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
-const StatisticLine = ({ text, value }) => <p>{text} {value}</p>
+const StatisticLine = ({ text, value }) => <tr><td>{text}</td><td>{value}</td></tr>
 const Statistics = ({good, neutral, bad}) => {
     if (good === 0 && neutral === 0 && bad === 0) {
         return <p>No feedback given</p>
     }
     return (
-        <>
+        <table>
+            <tbody>
             <StatisticLine text="good" value= { good } />
             <StatisticLine text="neutral" value= { neutral } />
             <StatisticLine text="bad" value={ bad } />
             <StatisticLine text="all" value ={ getTotal(good, neutral, bad) } />
             <StatisticLine text="average" value={ getAverage(good, neutral, bad) } />
             <StatisticLine text="positive" value={ getPositive(good, neutral, bad) + " %" } />
-        </>
+            </tbody>
+        </table>
     )
 }
 
