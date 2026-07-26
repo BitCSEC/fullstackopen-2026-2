@@ -1,27 +1,27 @@
 import { useState } from 'react'
 
 // Funciones auxiliares
-const getTotal = (good, neutral, bad) => good + neutral + bad
-const getAverage = (good, neutral, bad) => (good - bad) / getTotal(good, neutral, bad)
-const getPositive = (good, neutral, bad) => good / getTotal(good, neutral, bad) * 100 
+const getTotal = (props) => props.good + props.neutral + props.bad
+const getAverage = (props) => (props.good - props.bad) / getTotal(props)
+const getPositive = (props) => props.good / getTotal(props) * 100 
 
 // Componentes
 const SectionTitle = ({ text }) => <h1>{text}</h1>
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 const StatisticLine = ({ text, value }) => <tr><td>{text}</td><td>{value}</td></tr>
-const Statistics = ({good, neutral, bad}) => {
-    if (good === 0 && neutral === 0 && bad === 0) {
+const Statistics = (props) => {
+    if (props.good === 0 && props.neutral === 0 && props.bad === 0) {
         return <p>No feedback given</p>
     }
     return (
         <table>
             <tbody>
-            <StatisticLine text="good" value= { good } />
-            <StatisticLine text="neutral" value= { neutral } />
-            <StatisticLine text="bad" value={ bad } />
-            <StatisticLine text="all" value ={ getTotal(good, neutral, bad) } />
-            <StatisticLine text="average" value={ getAverage(good, neutral, bad) } />
-            <StatisticLine text="positive" value={ getPositive(good, neutral, bad) + " %" } />
+            <StatisticLine text="good" value= { props.good } />
+            <StatisticLine text="neutral" value= { props.neutral } />
+            <StatisticLine text="bad" value={ props.bad } />
+            <StatisticLine text="all" value ={ getTotal(props) } />
+            <StatisticLine text="average" value={ getAverage(props) } />
+            <StatisticLine text="positive" value={ getPositive(props) + " %" } />
             </tbody>
         </table>
     )
