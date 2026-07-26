@@ -27,7 +27,7 @@ const App = () => {
         setSelected(index)
     }
     const handleVoteButton = () => {
-        const newVotes = votes.map((anecdote, index, votes) => {
+        const newVotes = votes.map((_, index, votes) => {
             return index === selected ? votes[index] + 1 : votes[index] 
         })
         setVotes(newVotes)
