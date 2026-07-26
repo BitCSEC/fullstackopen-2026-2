@@ -1,8 +1,29 @@
 import { useState } from 'react'
 
+// Funciones auxiliares
+const getTotal = (good, neutral, bad) => good + neutral + bad
+const getAverage = (good, neutral, bad) => (good - bad) / getTotal(good, neutral, bad)
+const getPositive = (good, neutral, bad) => good / getTotal(good, neutral, bad) * 100 
+
+// Componentes
 const SectionTitle = ({ text }) => <h1>{text}</h1>
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
-const Statistic = ({ text, count }) => <p>{text} {count}</p>
+const StatisticLine = ({ text, value }) => <p>{text} {value}</p>
+const Statistics = ({good, neutral, bad}) => {
+    if (good === 0 && neutral === 0 && bad === 0) {
+        return <p>No feedback given</p>
+    }
+    return (
+        <>
+            <StatisticLine text="good" value= { good } />
+            <StatisticLine text="neutral" value= { neutral } />
+            <StatisticLine text="bad" value={ bad } />
+            <StatisticLine text="all" value ={ getTotal(good, neutral, bad) } />
+            <StatisticLine text="average" value={ getAverage(good, neutral, bad) } />
+            <StatisticLine text="positive" value={ getPositive(good, neutral, bad) + " %" } />
+        </>
+    )
+}
 
 const App = () => { 
     // Agregar estado al componente
@@ -10,27 +31,19 @@ const App = () => {
     const [neutral, setNeutral] = useState(0)
     const [bad, setBad] = useState(0)
 
-    // Agregar handlers apropieados
-    const handleGoodButton = () => {
-        setGood(good + 1)
-    }
-    const handleNeutralButton = () => {
-        setNeutral(neutral + 1)
-    }
-    const handleBadButton = () => {
-        setBad(bad + 1)
-    }
+    // Generador de handlers
+    const handleButton = (value, setter) => () => {
+        setter(value + 1)
+    } 
 
     return ( 
         <div>
             <SectionTitle text="give feedback" />
-            <Button onClick={handleGoodButton} text='good' />
-            <Button onClick={handleNeutralButton} text='neutral' />
-            <Button onClick={handleBadButton} text='bad' />
+            <Button onClick={handleButton(good, setGood)} text='good' />
+            <Button onClick={handleButton(neutral, setNeutral)} text='neutral' />
+            <Button onClick={handleButton(bad, setBad)} text='bad' />
             <SectionTitle text="Statistics" />
-            <Statistic text="good" count={ good } />
-            <Statistic text="neutral" count={ neutral } />
-            <Statistic text="bad" count={ bad } />
+            <Statistics good={ good } neutral={ neutral } bad={ bad } />
         </div> 
     )
 }
