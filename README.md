@@ -16,12 +16,12 @@
 
 ## Parte 1.d: A more complex state, debugging React apps
 
-- [ ] Ejercicio 1.6
-- [ ] Ejercicio 1.7
-- [ ] Ejercicio 1.8
-- [ ] Ejercicio 1.9
-- [ ] Ejercicio 1.10
-- [ ] Ejercicio 1.11
-- [ ] Ejercicio 1.12
-- [ ] Ejercicio 1.13
-- [ ] Ejercicio 1.14
+- [x] Ejercicio 1.6
+- [x] Ejercicio 1.7
+- [x] Ejercicio 1.8
+- [x] Ejercicio 1.9
+- [x] Ejercicio 1.10
+- [x] Ejercicio 1.11
+- [x] Ejercicio 1.12
+- [x] Ejercicio 1.13
+- [x] Ejercicio 1.14
