@@ -3,6 +3,7 @@ import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonsList from './components/PersonsList'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 
 const App = () => {
     // Estado
@@ -10,6 +11,8 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
+    const [status, setStatus] = useState(null)
+    const [statusMessage, setStatusMessage] = useState(null)
     const filteredPersons = persons.filter(person =>
         person.name.toLowerCase().includes(newFilter.toLowerCase())
     )
@@ -28,7 +31,7 @@ const App = () => {
     // Handlers
     const handleAddButton = (event) => {
         event.preventDefault()
-        
+
         const name = newName
         const number = newNumber
         const newPerson = { name, number }
@@ -50,6 +53,14 @@ const App = () => {
                         setNewName('')
                         setNewNumber('')
                     })
+                    .catch(_ => {
+                        setStatusMessage(`Information of ${name} has already been removed from server`)
+                        setStatus('error')
+                        setTimeout(() => {
+                            setStatusMessage(null)
+                            setStatus(null)
+                        }, 5000)
+                    })
             }
         } else {
             personService
@@ -58,6 +69,11 @@ const App = () => {
                     setPersons(persons.concat(person))
                     setNewName('')
                     setNewNumber('')
+                    setStatusMessage(`Added ${person.name}`)
+                    setStatus('success')
+                    setTimeout(() => {
+                        setStatusMessage(null)
+                    }, 5000)
                 })
         }
     }
@@ -90,9 +106,14 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={statusMessage} status={status} />
             <Filter value={newFilter} onChange={handleFilterChange} />
             <h2>add a new</h2>
-            <PersonForm onSubmit={handleAddButton} values={[newName, newNumber]} handlers={[handleNameChange, handleNumberChange]} />
+            <PersonForm
+                onSubmit={handleAddButton}
+                values={[newName, newNumber]}
+                handlers={[handleNameChange, handleNumberChange]}
+            />
             <h2>Numbers</h2>
             <PersonsList persons={filteredPersons} deleteHandler={deletePerson} />
         </div>
