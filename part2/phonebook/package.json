@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "server": "json-server -p 3001 db.json"
+    "server": "json-server -p 3001 db.json --watch"
   },
   "dependencies": {
     "axios": "^1.19.0",
