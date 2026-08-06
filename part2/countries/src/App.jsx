@@ -21,10 +21,12 @@ function App() {
         setNewFilter(event.target.value)
     }
 
+    const buttonHandler = (name) => () => { setNewFilter(name) }
+
     return (
         <>
             <SearchInput id={"filter"} value={newFilter} onChange={handleFilterChange} />
-            <Result results={filteredCountries} />
+            <Result results={filteredCountries} buttonHandler={buttonHandler}/>
         </>
     )
 }
