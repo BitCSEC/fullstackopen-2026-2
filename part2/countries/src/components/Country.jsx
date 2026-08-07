@@ -14,7 +14,7 @@ const Country = ({ country, weather }) => {
                 ))}
             </ul>
             <img width="240" src={flags.svg} alt={flags.svg} />
-            <WeatherInfo weather={weather} />
+            <WeatherInfo weather={weather === undefined ? undefined : { ...weather, name: capital[0] }} />
         </>
     )
 }
