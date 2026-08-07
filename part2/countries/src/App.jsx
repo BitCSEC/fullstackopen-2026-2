@@ -7,9 +7,8 @@ import SearchInput from './components/SearchInput'
 function App() {
     const [newFilter, setNewFilter] = useState('')
     const [countryList, setCountryList] = useState([])
-    const filteredCountries = countryList.filter(country =>
-        country.name.common.toLowerCase().includes(newFilter.toLowerCase())
-    )
+    const [weather, setWeather] = useState()
+    const [filteredCountries, setFilteredCountries] = useState([])
 
     useEffect(() => {
         countries
@@ -17,8 +16,19 @@ function App() {
             .then(response => setCountryList(response))
     }, [])
 
+    useEffect(() => {
+        if (filteredCountries.length === 1) {
+            countries
+                .getWeather(filteredCountries[0])
+                .then(response => setWeather(response))
+        }
+    }, [filteredCountries])
+
     const handleFilterChange = (event) => {
         setNewFilter(event.target.value)
+        setFilteredCountries(countryList.filter(country =>
+            country.name.common.toLowerCase().includes(event.target.value.toLowerCase())
+        ))
     }
 
     const buttonHandler = (name) => () => { setNewFilter(name) }
@@ -26,7 +36,11 @@ function App() {
     return (
         <>
             <SearchInput id={"filter"} value={newFilter} onChange={handleFilterChange} />
-            <Result results={filteredCountries} buttonHandler={buttonHandler}/>
+            <Result
+                results={filteredCountries}
+                buttonHandler={buttonHandler}
+                weather={weather}
+            />
         </>
     )
 }

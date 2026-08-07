@@ -3,21 +3,17 @@ import Country from "./Country"
 const Entry = ({ name, onClick }) => {
     return (
         <>
-            <br/>{name} <button onClick={onClick}>Show</button>
+            <br />{name} <button onClick={onClick}>Show</button>
         </>
     )
 }
 
-const Result = ({ results, buttonHandler }) => {
-    if (results.length === 0) {
-        return <p>No filter specified</p>
-    }
-
+const Result = ({ results, buttonHandler, weather }) => {
     if (results.length === 1) {
-        return <Country country={results[0]} />
+        return <Country country={results[0]} weather={weather} />
     }
 
-    if (results.length <= 10) {
+    if (0 < results.length && results.length <= 10) {
         return (
             <>
                 {results.map((country, idx) =>

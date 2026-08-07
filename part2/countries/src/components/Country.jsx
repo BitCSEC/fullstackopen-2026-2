@@ -1,4 +1,6 @@
-const Country = ({ country }) => {
+import WeatherInfo from "./WeatherInfo"
+
+const Country = ({ country, weather }) => {
     const { name, capital, area, languages, flags } = country
     return (
         <>
@@ -11,7 +13,8 @@ const Country = ({ country }) => {
                     <li key={key}>{value}</li>
                 ))}
             </ul>
-            <img width="240" src={flags.svg} alt={flags.svg}/>
+            <img width="240" src={flags.svg} alt={flags.svg} />
+            <WeatherInfo weather={weather} />
         </>
     )
 }
