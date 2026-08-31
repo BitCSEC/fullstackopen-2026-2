@@ -4,6 +4,9 @@ const morgan = require('morgan')
 const app = express()
 app.use(express.json())
 
+const cors = require('cors')
+app.use(cors())
+
 morgan.token('body', (req) => {
     return JSON.stringify(req.body)
 })
@@ -56,9 +59,10 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id
-    persons = persons.map(person => person.id !== id)
+    const person = persons.find(person => person.id === id)
+    persons = persons.filter(person => person.id !== id)
 
-    res.status(204).end()
+    res.status(200).json(person)
 })
 
 const generateId = () => {
@@ -87,7 +91,7 @@ app.post('/api/persons', (req, res) => {
     }
     persons = persons.concat(person)
 
-    res.status(201).end()
+    res.status(201).json(person)
 })
     
 const PORT = 3001
