@@ -13,7 +13,7 @@ const App = () => {
     const [newFilter, setNewFilter] = useState('')
     const [status, setStatus] = useState(null)
     const [statusMessage, setStatusMessage] = useState(null)
-    const filteredPersons = persons.filter(person =>
+    const filteredPersons = persons.filter(person => 
         person.name.toLowerCase().includes(newFilter.toLowerCase()) 
     )
 
@@ -22,6 +22,7 @@ const App = () => {
         personService
             .getAll()
             .then(persons => {
+                console.log(persons)
                 setPersons(persons)
             })
     }
