@@ -85,8 +85,8 @@ const App = () => {
         if (confirmation) {
             personService
                 .deletePerson(id)
-                .then(deletedPerson => {
-                    setPersons(persons.filter(person => person.id != deletedPerson.id))
+                .then(_ => {
+                    setPersons(persons.filter(person => person.id != id))
                 })
         }
     }
