@@ -13,8 +13,8 @@ const App = () => {
     const [newFilter, setNewFilter] = useState('')
     const [status, setStatus] = useState(null)
     const [statusMessage, setStatusMessage] = useState(null)
-    const filteredPersons = persons.filter(person => 
-        person.name.toLowerCase().includes(newFilter.toLowerCase()) 
+    const filteredPersons = persons.filter(person =>
+        person.name.toLowerCase().includes(newFilter.toLowerCase())
     )
 
     // Effect Hook
@@ -22,7 +22,6 @@ const App = () => {
         personService
             .getAll()
             .then(persons => {
-                console.log(persons)
                 setPersons(persons)
             })
     }
@@ -71,6 +70,14 @@ const App = () => {
                     setNewNumber('')
                     setStatusMessage(`Added ${person.name}`)
                     setStatus('success')
+                    setTimeout(() => {
+                        setStatusMessage(null)
+                    }, 5000)
+                })
+                .catch(error => {
+                    console.log(error.response.data.error)
+                    setStatusMessage(error.response.data.error)
+                    setStatus('error')
                     setTimeout(() => {
                         setStatusMessage(null)
                     }, 5000)

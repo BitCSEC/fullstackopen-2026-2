@@ -16,7 +16,7 @@ morgan.token('body', (request) => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(express.static('dist'))
 
-app.get('/api/people', (_, response) => {
+app.get('/api/people', (_, response, next) => {
     Person
         .find({})
         .then(result => {
@@ -25,13 +25,18 @@ app.get('/api/people', (_, response) => {
         .catch(error => next(error))
 })
 
-app.get('/info', (_, res) => {
-    const first_p = `<p>Phonebook has info for ${people.length} people</p>`
-    const second_p = `<p>${Date().toString()}</p>`
-    res.status(200).send(first_p + second_p)
+app.get('/info', (_, response, next) => {
+    Person
+        .countDocuments({})
+        .then(count => {
+            const first_p = `<p>Phonebook has info for ${count} people</p>`
+            const second_p = `<p>${Date().toString()}</p>`
+            response.status(200).send(first_p + second_p)
+        })
+        .catch(error => next(error))
 })
 
-app.get('/api/people/:id', (request, response) => {
+app.get('/api/people/:id', (request, response, next) => {
     Person
         .findById(request.params.id)
         .then(result => {
@@ -44,7 +49,7 @@ app.get('/api/people/:id', (request, response) => {
         .catch(error => next(error))
 })
 
-app.delete('/api/people/:id', (request, response) => {
+app.delete('/api/people/:id', (request, response, next) => {
     Person
         .findByIdAndDelete(request.params.id)
         .then(_ => {
@@ -53,7 +58,7 @@ app.delete('/api/people/:id', (request, response) => {
         .catch(error => next(error))
 })
 
-app.post('/api/people', (request, response) => {
+app.post('/api/people', (request, response, next) => {
     const body = request.body
 
     if (!body.name || !body.number) {
@@ -76,34 +81,32 @@ app.post('/api/people', (request, response) => {
 
 })
 
-app.put('/api/people/:id', (request, response) => {
+app.put('/api/people/:id', (request, response, next) => {
     const body = request.body
-
-    if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: 'content missing'
-        })
-    }
 
     Person
         .findById(request.params.id)
-    .then(person => {
-        if (!person) {
-            return response.status(404).end()
-        }
+        .then(person => {
+            if (!person) {
+                return response.status(404).end()
+            }
 
-        person.name = body.name
-        person.number = body.number
+            person.name = body.name
+            person.number = body.number
 
-        return person.save().then((updatedPerson) => {
-            response.json(updatedPerson)
+            return person.save().then((updatedPerson) => {
+                response.json(updatedPerson)
+            })
         })
-    })
-    .catch(error => next(error))
+        .catch(error => next(error))
 })
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
+
+    if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
+    }
     response.status(500).end()
 
     next(error)
