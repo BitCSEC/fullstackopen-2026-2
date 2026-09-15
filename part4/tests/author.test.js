@@ -1,28 +1,27 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
-const listHelper = require('../utils/list_helper')
-const { emptyList, listWithOneBlog, blogs } = require('../utils/bloglist')
+const helper = require('../utils/list_helper')
 
 describe('most repeated author', () => {
     test('of an empty list is undefined', () => {
-        assert.strictEqual(listHelper.mostBlogs(emptyList), undefined)
+        assert.strictEqual(helper.mostBlogs(helper.emptyList), undefined)
     })
     test('when list has only one blog, the author of that blog', () => {
-        assert.deepStrictEqual(listHelper.mostBlogs(listWithOneBlog), { author: 'Edsger W. Dijkstra', blogs: 1 })
+        assert.deepStrictEqual(helper.mostBlogs(helper.listWithOneBlog), { author: 'Kev Quirk', blogs: 1 })
     })
     test('of a blogger list is calculated right', () => {
-        assert.deepStrictEqual(listHelper.mostBlogs(blogs), { author: 'Robert C. Martin', blogs: 3 })
+        assert.deepStrictEqual(helper.mostBlogs(helper.blogs), { author: 'Robert C. Martin', blogs: 3 })
     })
 })
 
 describe('author with most likes', () => {
     test('of an empty list is undefined', () => {
-        assert.strictEqual(listHelper.mostLikes(emptyList), undefined)
+        assert.strictEqual(helper.mostLikes(helper.emptyList), undefined)
     })
     test('when list has only one blog, the author of that blog', () => {
-        assert.deepStrictEqual(listHelper.mostLikes(listWithOneBlog), { author: 'Edsger W. Dijkstra', likes: 5 })
+        assert.deepStrictEqual(helper.mostLikes(helper.listWithOneBlog), { author: 'Kev Quirk', likes: 5 })
     })
     test('of a blogger list is calculated right', () => {
-        assert.deepStrictEqual(listHelper.mostLikes(blogs), { author: 'Edsger W. Dijkstra', likes: 17 })
+        assert.deepStrictEqual(helper.mostLikes(helper.blogs), { author: 'Edsger W. Dijkstra', likes: 17 })
     })
 })

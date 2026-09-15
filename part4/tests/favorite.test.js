@@ -1,21 +1,20 @@
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
-const listHelper = require('../utils/list_helper')
-const { emptyList, listWithOneBlog, blogs } = require('../utils/bloglist')
+const helper = require('../utils/list_helper')
 
 describe('favorite blog', () => {
     test('of emtpy list is undefined', () => {
-        assert.strictEqual(listHelper.favoriteBlog(emptyList), undefined)
+        assert.strictEqual(helper.favoriteBlog(helper.emptyList), undefined)
     })
 
     test('when list has only one blog equals that blog', () => {
-        result = listHelper.favoriteBlog(listWithOneBlog)
+        result = helper.favoriteBlog(helper.listWithOneBlog)
 
-        assert.deepStrictEqual(result, listWithOneBlog[0])
+        assert.deepStrictEqual(result, helper.listWithOneBlog[0])
     })
     test('of a blogger list is calculated right', () => {
-        result = listHelper.favoriteBlog(blogs)
+        result = helper.favoriteBlog(helper.blogs)
 
-        assert.deepStrictEqual(result, blogs[2])
+        assert.deepStrictEqual(result, helper.blogs[2])
     })
 })
