@@ -1,3 +1,45 @@
+const newUser = {
+    username: 'Nano',
+    name: 'Fernando Díaz',
+    password: 'LeondeCollao'
+}
+
+const badPwdUser = {
+    username: 'badPwd',
+    name: 'Malacón Traseña',
+    password: 'ho'
+}
+
+const badUsernameUser = {
+    username: 'bu',
+    name: 'Malu Suario',
+    password: 'bien'
+}
+
+const repeatedUsernameUser = {
+    username: 'hellas',
+    name: 'Arto II Hellas',
+    password: 'repetido'
+}
+
+const users = [
+    {
+        username: 'hellas',
+        name: 'Arto Hellas',
+        password: 'sekret69'
+    },
+    {
+        username: 'mluukai',
+        name: 'Matti Lukkainen',
+        password: 'salainen'
+    },
+    {
+        username: 'admin',
+        name: 'Admi Nistrador',
+        password: 'admin'
+    }
+]
+
 const blogToBeDeleted = {
     _id: '5a422aa71b54a676234d17f5',
     title: 'Security versus Privacy',
@@ -72,6 +114,11 @@ const blogs = [
 ]
 
 module.exports = {
+    badPwdUser,
+    badUsernameUser,
+    repeatedUsernameUser,
+    newUser,
+    users,
     blogToBeDeleted,
     emptyList,
     listWithOneBlog,

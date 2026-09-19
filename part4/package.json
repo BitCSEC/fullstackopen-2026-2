@@ -7,6 +7,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "test:blogs": "cross-env NODE_ENV=test node tests/blog_api.test.js",
+    "test:users": "cross-env NODE_ENV=test node tests/user_api.test.js",
+    "test:api": "cross-env NODE_ENV=test npm run test:users && npm run test:blogs",
     "test": "cross-env NODE_ENV=test node --test",
     "start": "corss-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development node --watch index.js"

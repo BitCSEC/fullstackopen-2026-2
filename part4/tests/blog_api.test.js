@@ -3,6 +3,7 @@ const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const app = require('../app')
 const helper = require('./test_helper')
 
@@ -11,7 +12,7 @@ const api = supertest(app)
 describe('Testing blogs API', () => {
     let listWithOneBlog, initialBlogs, blogToDelete, noLikesBlog, noTitleBlog, noUrlBlog
 
-    before(() => {
+    before(async () => {
         blogToDelete = helper.blogToBeDeleted
         listWithOneBlog = helper.listWithOneBlog
         initialBlogs = [...helper.blogs, { ...blogToDelete }]
@@ -34,6 +35,8 @@ describe('Testing blogs API', () => {
             author: 'Brennan Kenneth Brown',
             __v: 0
         }
+
+        await User.insertMany(helper.users)
     })
 
     beforeEach(async () => {
@@ -140,6 +143,7 @@ describe('Testing blogs API', () => {
 
     after(async () => {
         await Blog.deleteMany({})
+        await User.deleteMany({})
         await mongoose.connection.close()
     })
 })
