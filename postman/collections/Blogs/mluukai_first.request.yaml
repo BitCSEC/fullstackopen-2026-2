@@ -1,0 +1,18 @@
+$kind: http-request
+description: ""
+url: http://localhost:3003/api/blogs
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "title": "Hello from my new Thinkpad",
+        "author": "Sal",
+        "url": "https://sals.place/blog/hello-from-thinkpad/",
+        "likes": 20
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{mluukai_token}}"
+order: 4481904820301464

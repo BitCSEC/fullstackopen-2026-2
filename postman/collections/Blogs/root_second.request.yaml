@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:3003/api/blogs
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "title": "Linkception",
+        "author": "Kev Quirk",
+        "url": "https://kevquirk.com/linkception",
+        "likes": 1
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{root_token}}"
+order: 4441148948086336

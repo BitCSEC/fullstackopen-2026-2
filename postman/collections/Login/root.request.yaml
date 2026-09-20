@@ -1,0 +1,26 @@
+$kind: http-request
+description: ""
+url: http://localhost:3003/api/login
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "username": "root",
+        "password": "Salainen"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      const responseData = pm.response.json();
+
+      if (pm.response.code === 200 && responseData.token) {
+          await pm.vault.set("root_token", responseData.token);
+          console.log("Token updated in Local Vault");
+      } else {
+          console.log("Failed to extract token");
+      }
+    language: text/javascript
+order: 1789917134723

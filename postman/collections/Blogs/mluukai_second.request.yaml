@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:3003/api/blogs
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "title": "Bought a Thinkpad",
+        "author": "Sal",
+        "url": "https://sals.place/blog/bought-a-thinkpad/",
+        "likes": 12
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{mluukai_token}}"
+order: 4503326919422370

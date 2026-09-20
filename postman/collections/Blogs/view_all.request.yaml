@@ -1,0 +1,5 @@
+$kind: http-request
+description: ""
+url: http://localhost:3003/api/blogs
+method: GET
+order: 1908737087446096

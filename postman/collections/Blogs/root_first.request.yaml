@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:3003/api/blogs
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "title": "On Publishing Your Salary",
+        "author": "Kev Quirk",
+        "url": "https://kevquirk.com/on-publishing-your-salary",
+        "likes": 4
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{root_token}}"
+order: 4190487732031028

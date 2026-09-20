@@ -1,0 +1,11 @@
+$kind: collection
+variables:
+  - key: json_web_token_177c
+    secret: true
+    disabled: false
+  - key: root_token
+    secret: true
+    disabled: false
+  - key: mluukai_token
+    secret: true
+    disabled: false

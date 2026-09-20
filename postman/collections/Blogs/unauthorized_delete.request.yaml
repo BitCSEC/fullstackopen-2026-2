@@ -1,0 +1,8 @@
+$kind: http-request
+url: http://localhost:3003/api/blogs/6ab03b5aefb0e2f912aafe33
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{root_token}}"
+order: 4503571258983553
