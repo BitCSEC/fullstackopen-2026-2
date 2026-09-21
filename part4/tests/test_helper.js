@@ -26,7 +26,8 @@ const users = [
     {
         username: 'hellas',
         name: 'Arto Hellas',
-        password: 'sekret69'
+        password: 'sekret69',
+        _id: '6ab03a02efb0e2f912aafe2e' 
     },
     {
         username: 'mluukai',
@@ -46,6 +47,7 @@ const blogToBeDeleted = {
     author: 'Loren Stephens',
     url: 'https://ldstephens.net/posts/security-versus-privacy/',
     likes: 0,
+    user: '6ab03a02efb0e2f912aafe2e',
     __v: 0
 }
 

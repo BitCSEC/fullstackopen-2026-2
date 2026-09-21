@@ -6,11 +6,12 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const app = require('../app')
 const helper = require('./test_helper')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
 describe('Testing blogs API', () => {
-    let listWithOneBlog, initialBlogs, blogToDelete, noLikesBlog, noTitleBlog, noUrlBlog
+    let listWithOneBlog, initialBlogs, blogToDelete, noLikesBlog, noTitleBlog, noUrlBlog, token
 
     before(async () => {
         blogToDelete = helper.blogToBeDeleted
@@ -37,6 +38,9 @@ describe('Testing blogs API', () => {
         }
 
         await User.insertMany(helper.users)
+
+        const secret = process.env.SECRET
+        token = jwt.sign({ username: 'hellas', id: '6ab03a02efb0e2f912aafe2e' }, secret)
     })
 
     beforeEach(async () => {
@@ -73,6 +77,7 @@ describe('Testing blogs API', () => {
         test('succeeds with valid data', async () => {
             await api
                 .post('/api/blogs')
+                .set({ Authorization: `Bearer ${token}` })
                 .send(listWithOneBlog[0])
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -88,6 +93,7 @@ describe('Testing blogs API', () => {
         test('likes defaults to zero when missing', async () => {
             await api
                 .post('/api/blogs')
+                .set({ Authorization: `Bearer ${token}` })
                 .send(noLikesBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -100,15 +106,25 @@ describe('Testing blogs API', () => {
         test('fails with status code 400 if data is invalid', async () => {
             await api
                 .post('/api/blogs')
+                .set({ Authorization: `Bearer ${token}` })
                 .send(noTitleBlog)
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
             await api
                 .post('/api/blogs')
+                .set({ Authorization: `Bearer ${token}` })
                 .send(noUrlBlog)
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
+        })
+
+        test('fails with status code 401 if token is not provided', async () => {
+            await api
+            .post('/api/blogs')
+            .send(noLikesBlog)
+            .expect(401)
+            .expect('Content-Type', /application\/json/)
         })
     })
 
@@ -116,6 +132,7 @@ describe('Testing blogs API', () => {
         test('succeeds with status code 204 if id is valid', async () => {
             await api
                 .delete(`/api/blogs/${blogToDelete._id}`)
+                .set({ Authorization: `Bearer ${token}` })
                 .expect(204)
 
             let finalBlogs = await Blog.find({})
