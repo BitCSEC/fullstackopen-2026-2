@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -13,6 +14,8 @@ const App = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
+    const [message, setMessage] = useState(null)
+    const [messageType, setMessageType] = useState(null)
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
@@ -40,7 +43,12 @@ const App = () => {
             setUsername('')
             setPassword('')
         } catch {
-            console.log('wrong credentials')
+            setMessage('wrong credentials')
+            setMessageType("error")
+            setTimeout(() => {
+                setMessage(null)
+                setMessageType(null)
+            }, 5000)
         }
     }
 
@@ -51,22 +59,38 @@ const App = () => {
 
     const handleCreateBlog = async event => {
         event.preventDefault()
-        const newBlogObject = {
-            title,
-            author,
-            url
+        try {
+            const newBlogObject = {
+                title,
+                author,
+                url
+            }
+
+            const newBlog = await blogService.create(newBlogObject)
+            setBlogs(blogs.concat(newBlog))
+            setMessage(`${newBlogObject.title} has been created`)
+            setMessageType("success")
+            setTimeout(() => {
+                setMessage(null)
+                setMessageType(null)
+            }, 5000)
+            setTitle('')
+            setAuthor('')
+            setUrl('')
+        } catch (error) {
+            setMessage(error.response.data.error)
+            setMessageType("error")
+            setTimeout(() => {
+                setMessage(null)
+                setMessageType(null)
+            }, 5000)
         }
-        
-        const newBlog = await blogService.create(newBlogObject)
-        setBlogs(blogs.concat(newBlog))
-        setTitle('')
-        setAuthor('')
-        setUrl('')
     }
 
     if (!user) {
         return (
             <div>
+                <Notification message={message} type={messageType} />
                 <LoginForm
                     username={username}
                     password={password}
@@ -78,6 +102,7 @@ const App = () => {
 
     return (
         <div>
+            <Notification message={message} type={messageType} />
             <h2>blogs</h2>
             <CreateBlogForm
                 title={title}

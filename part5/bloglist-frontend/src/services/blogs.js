@@ -5,7 +5,6 @@ let token
 
 const setToken = (newToken) => {
     token = `Bearer ${newToken}`
-    console.log(token)
 }
 
 const getAll = () => {
