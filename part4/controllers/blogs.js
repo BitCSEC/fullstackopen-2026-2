@@ -37,14 +37,14 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response, n
     response.status(204).end()
 })
 
-blogsRouter.patch('/:id', async (request, response, next) => {
-    await Blog.findByIdAndUpdate(request.params.id, {
-        $set: { likes: request.body.likes }
-    }, {
-        runValidators: true
-    })
+blogsRouter.put('/:id', async (request, response, next) => {
+    const blog = await Blog.findById(request.params.id).populate('user')
+    const updatedBlog = request.body
 
-    response.status(200).json({ message: 'successful update' })
+    blog.likes = updatedBlog.likes
+
+    const savedBlog = await blog.save()
+    response.json(savedBlog)
 })
 
 module.exports = blogsRouter

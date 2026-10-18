@@ -8,8 +8,8 @@ const setToken = (newToken) => {
 }
 
 const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+    const request = axios.get(baseUrl)
+    return request.then(response => response.data)
 }
 
 const create = async data => {
@@ -20,4 +20,11 @@ const create = async data => {
     return response.data
 }
 
-export default { getAll, create, setToken }
+const updateLikes = async blog => {
+    console.log(blog)
+    const updatedBlog = { ...blog, likes: blog.likes + 1 }
+    const response = await axios.put(`${baseUrl}/${blog.id}`, updatedBlog)
+    return response.data
+}
+
+export default { getAll, create, updateLikes, setToken }

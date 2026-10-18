@@ -147,8 +147,8 @@ describe('Testing blogs API', () => {
             await blog.save()
 
             await api
-                .patch(`/api/blogs/${noLikesBlog._id}`)
-                .send({ likes: +1 })
+                .put(`/api/blogs/${noLikesBlog._id}`)
+                .send({ ...blog, likes: blog.likes + 1 })
                 .expect(200)
                 .expect('Content-Type', /application\/json/)
 
