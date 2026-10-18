@@ -88,6 +88,10 @@ const App = () => {
         )
     }
 
+    const sortedBlogs = blogs.toSorted(
+        (a, b) => a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
+    )
+
     return (
         <div>
             <Notification message={message} type={messageType} />
@@ -99,7 +103,7 @@ const App = () => {
             <Togglable showLabel="create new blog">
                 <CreateBlogForm createBlog={addBlog} />
             </Togglable>
-            {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+            {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} />)}
         </div>
     )
 

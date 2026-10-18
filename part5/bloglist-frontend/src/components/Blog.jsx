@@ -3,7 +3,6 @@ import blogService from "../services/blogs"
 
 const Blog = ({ blog }) => {
     const [visible, setVisible] = useState(false)
-    const [likes, setLikes] = useState(blog.likes)
     const [currentBlog, setCurrentBlog] = useState(blog)
 
     const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -18,8 +17,6 @@ const Blog = ({ blog }) => {
         try {
             const response = await blogService.updateLikes(currentBlog)
             setCurrentBlog(response)
-            console.log(response)
-            console.log(blog)
         } catch (error) {
             console.log(error)
         }
