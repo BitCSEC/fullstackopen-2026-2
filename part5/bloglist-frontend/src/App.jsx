@@ -88,6 +88,9 @@ const App = () => {
         }
     }
 
+    const displayDeleteButton = blogObject => blogObject.user.username === user.username
+    
+
     if (!user) {
         return (
             <div>
@@ -116,8 +119,7 @@ const App = () => {
             <Togglable showLabel="create new blog">
                 <CreateBlogForm createBlog={addBlog} />
             </Togglable>
-            {/* {blogs.map(blog => console.log(blog))} */}
-            {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} />)}
+            {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} displayDelete={displayDeleteButton} />)}
         </div>
     )
 
