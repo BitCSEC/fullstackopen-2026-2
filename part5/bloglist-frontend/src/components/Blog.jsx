@@ -1,7 +1,7 @@
 import { useState } from "react"
 import blogService from "../services/blogs"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, removeBlog }) => {
     const [visible, setVisible] = useState(false)
     const [currentBlog, setCurrentBlog] = useState(blog)
 
@@ -23,6 +23,12 @@ const Blog = ({ blog }) => {
 
     }
 
+    const deleteBlog = async event => {
+        console.log(blog)
+        event.preventDefault()
+        await removeBlog(blog)
+    }
+
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -40,7 +46,8 @@ const Blog = ({ blog }) => {
                 <div style={showWhenVisible}>
                     {currentBlog.url}<br />
                     likes {currentBlog.likes} <button onClick={addLike}>like</button><br />
-                    {currentBlog.user.name}
+                    {currentBlog.user.name}<br />
+                    <button onClick={deleteBlog}>delete</button>
                 </div>
             </div>
         </div>
