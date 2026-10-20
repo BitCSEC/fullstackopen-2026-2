@@ -42,7 +42,7 @@ const App = () => {
             setPassword('')
         } catch {
             setMessage('wrong credentials')
-            setMessageType("error")
+            setMessageType('error')
             setTimeout(() => {
                 setMessage(null)
                 setMessageType(null)
@@ -60,14 +60,14 @@ const App = () => {
             const newBlog = await blogService.create(blogObject)
             setBlogs(blogs.concat(newBlog))
             setMessage(`${blogObject.title} has been created`)
-            setMessageType("success")
+            setMessageType('success')
             setTimeout(() => {
                 setMessage(null)
                 setMessageType(null)
             }, 5000)
         } catch (error) {
             setMessage(error.response.data.error)
-            setMessageType("error")
+            setMessageType('error')
             setTimeout(() => {
                 setMessage(null)
                 setMessageType(null)
@@ -82,14 +82,14 @@ const App = () => {
                 setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
                 console.log(response)
             }
-            catch (error) { 
+            catch (error) {
                 console.log(error)
             }
         }
     }
 
     const displayDeleteButton = blogObject => blogObject.user.username === user.username
-    
+
 
     if (!user) {
         return (
