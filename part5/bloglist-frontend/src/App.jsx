@@ -88,6 +88,14 @@ const App = () => {
         }
     }
 
+    const updateLikes = async (blog) => {
+        try {
+            return await blogService.updateLikes(blog)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const displayDeleteButton = blogObject => blogObject.user.username === user.username
 
 
@@ -119,7 +127,7 @@ const App = () => {
             <Togglable showLabel="create new blog">
                 <CreateBlogForm createBlog={addBlog} />
             </Togglable>
-            {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} displayDelete={displayDeleteButton} />)}
+            {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} displayDelete={displayDeleteButton} updateLikes={updateLikes} />)}
         </div>
     )
 

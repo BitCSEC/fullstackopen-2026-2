@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, removeBlog, displayDelete }) => {
+const Blog = ({ blog, removeBlog, displayDelete, updateLikes }) => {
     const [visible, setVisible] = useState(false)
     const [currentBlog, setCurrentBlog] = useState(blog)
 
@@ -14,17 +13,11 @@ const Blog = ({ blog, removeBlog, displayDelete }) => {
 
     const addLike = async event => {
         event.preventDefault()
-        try {
-            const response = await blogService.updateLikes(currentBlog)
-            setCurrentBlog(response)
-        } catch (error) {
-            console.log(error)
-        }
-
+        const response = await updateLikes(currentBlog)
+        setCurrentBlog(response)
     }
 
     const deleteBlog = async event => {
-        console.log(blog)
         event.preventDefault()
         await removeBlog(blog)
     }

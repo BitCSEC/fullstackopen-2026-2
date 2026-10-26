@@ -21,11 +21,13 @@ describe('Blog component behaviour', () => {
     test('blog shows only title and author by default', () => {
         const mockRemove = vi.fn()
         const mockDisplay = vi.fn()
+        const mockLikesHandler = vi.fn()
 
         const { container } = render(<Blog
             blog={blog}
             removeBlog={mockRemove}
             displayDelete={mockDisplay}
+            updateLikes={mockLikesHandler}
         />)
 
         const element = screen.getByText('My Blog Post Hernán Cisternas')
@@ -38,11 +40,13 @@ describe('Blog component behaviour', () => {
     test('clicking view button show url and likes', async () => {
         const mockRemove = vi.fn()
         const mockDisplay = vi.fn()
+        const mockLikesHandler = vi.fn()
 
         const { container } = render(<Blog
             blog={blog}
             removeBlog={mockRemove}
             displayDelete={mockDisplay}
+            updateLikes={mockLikesHandler}
         />)
 
         const extraDetails = container.querySelector('.extra')
@@ -54,5 +58,25 @@ describe('Blog component behaviour', () => {
 
         expect(extraDetails).toBeVisible()
 
+    })
+
+    test('clicking likes twice calls event handler twice', async () => {
+        const mockRemove = vi.fn()
+        const mockDisplay = vi.fn()
+        const mockLikesHandler = vi.fn(() => blog)
+
+        render(<Blog
+            blog={blog}
+            removeBlog={mockRemove}
+            displayDelete={mockDisplay}
+            updateLikes={mockLikesHandler}
+        />)    
+
+        const user = userEvent.setup()
+        const likeButton = screen.getByText('like')
+        await user.click(likeButton)
+        await user.click(likeButton)
+
+        expect(mockLikesHandler.mock.calls).toHaveLength(2)
     })
 })
