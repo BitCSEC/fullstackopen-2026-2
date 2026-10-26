@@ -1,23 +1,58 @@
-import { getByText, render, screen } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
-import { expect } from "vitest"
 
-test('blog renders only title and author by default', () => {
+describe('Blog component behaviour', () => {
     const blog = {
-        title: 'myBlogPost',
-        author: 'Me',
-        url: 'http://localhost:3003/myBlogPost',
+        title: 'My Blog Post',
+        author: 'Hernán Cisternas',
+        url: 'http://localhost:3003/My-Blog-Post',
         likes: 10,
         user: {
-            name: "Hernán Cisternas"
+            username: 'admin',
+            name: 'Hernán Cisternas',
+            blogs: [
+                '6ad2b416acbd05fffb924007',
+                '6ad49efc4e9af1c93ed6e36c'
+            ]
         }
     }
 
-    const { container } = render(<Blog blog={blog} removeBlog={()=>{}} displayDelete={()=>{}} />)
+    test('blog shows only title and author by default', () => {
+        const mockRemove = vi.fn()
+        const mockDisplay = vi.fn()
 
-    const element = screen.getByText('myBlogPost Me')
-    expect(element).toBeDefined()
+        const { container } = render(<Blog
+            blog={blog}
+            removeBlog={mockRemove}
+            displayDelete={mockDisplay}
+        />)
 
-    const extraElement = container.querySelector('.extra')
-    expect(extraElement).not.toBeVisible()
+        const element = screen.getByText('My Blog Post Hernán Cisternas')
+        expect(element).toBeDefined()
+
+        const extraDetails = container.querySelector('.extra')
+        expect(extraDetails).not.toBeVisible()
+    })
+
+    test('clicking view button show url and likes', async () => {
+        const mockRemove = vi.fn()
+        const mockDisplay = vi.fn()
+
+        const { container } = render(<Blog
+            blog={blog}
+            removeBlog={mockRemove}
+            displayDelete={mockDisplay}
+        />)
+
+        const extraDetails = container.querySelector('.extra')
+        expect(extraDetails).not.toBeVisible()
+
+        const user = userEvent.setup()
+        const viewButton = screen.getByText('view')
+        await user.click(viewButton)
+
+        expect(extraDetails).toBeVisible()
+
+    })
 })
