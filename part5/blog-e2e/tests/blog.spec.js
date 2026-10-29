@@ -49,5 +49,21 @@ describe('Blog app', () => {
             await page.getByRole('button', { name: 'create' }).click()
             await expect(page.getByText('Título de ejemplo Autor de ejemplo')).toBeVisible()
         })
+
+        describe('When there is a blog', () => {
+            beforeEach(async ({ page }) => {
+                await page.getByRole('button', { name: 'create new blog' }).click()
+                await page.getByLabel('title').fill('Título de ejemplo')
+                await page.getByLabel('author').fill('Autor de ejemplo')
+                await page.getByLabel('url').fill('http://localhost:5173/url-de-ejemplo')
+                await page.getByRole('button', { name: 'create' }).click()
+            })
+
+            test('it can be liked', async ({ page }) => {
+                await page.getByText('Título de ejemplo Autor de ejemplo').getByRole('button', { name: 'view' }).click()
+                await page.getByRole('button', { name: 'like' }).click()
+                await expect(page.getByText('likes 1')).toBeVisible()
+            })
+        })
     })
 })
