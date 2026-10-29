@@ -80,7 +80,6 @@ const App = () => {
             try {
                 const response = await blogService.deleteBlog(blogObject)
                 setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
-                console.log(response)
             }
             catch (error) {
                 console.log(error)
@@ -96,7 +95,8 @@ const App = () => {
         }
     }
 
-    const displayDeleteButton = blogObject => blogObject.user.username === user.username
+    const displayDeleteButton = blogObject => { 
+        return blogObject.user.username === user.username }
 
 
     if (!user) {

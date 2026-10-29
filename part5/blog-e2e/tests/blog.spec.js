@@ -50,7 +50,7 @@ describe('Blog app', () => {
             await expect(page.getByText('Título de ejemplo Autor de ejemplo')).toBeVisible()
         })
 
-        describe('When there is a blog', () => {
+        describe('and there is a blog', () => {
             beforeEach(async ({ page }) => {
                 await page.getByRole('button', { name: 'create new blog' }).click()
                 await page.getByLabel('title').fill('Título de ejemplo')
@@ -63,6 +63,16 @@ describe('Blog app', () => {
                 await page.getByText('Título de ejemplo Autor de ejemplo').getByRole('button', { name: 'view' }).click()
                 await page.getByRole('button', { name: 'like' }).click()
                 await expect(page.getByText('likes 1')).toBeVisible()
+            })
+
+            test('the user who posted it can delete it', async ({ page }) => {
+                await page.getByText('Título de ejemplo Autor de ejemplo').getByRole('button', { name: 'view' }).click()
+                page.on('dialog', async dialog => {
+                    expect(dialog.type()).toContain('confirm')
+                    await dialog.accept()
+                })
+                await page.getByRole('button', { name: 'delete' }).click()
+                await expect(page.getByText('Título de ejemplo Autor de ejemplo')).toBeHidden()
             })
         })
     })
