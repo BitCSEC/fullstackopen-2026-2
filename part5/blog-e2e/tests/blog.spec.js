@@ -97,6 +97,7 @@ describe('Blog app', () => {
                 await expect(first.getByRole('button', { name: 'delete' })).toBeHidden()
 
             })
+            // TODO: ejercicio 5.23
         })
     })
 })
