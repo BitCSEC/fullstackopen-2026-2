@@ -72,6 +72,7 @@ const App = () => {
                 setMessage(null)
                 setMessageType(null)
             }, 5000)
+            return true
         } catch (error) {
             setMessage(error.response.data.error)
             setMessageType('error')
@@ -79,6 +80,7 @@ const App = () => {
                 setMessage(null)
                 setMessageType(null)
             }, 5000)
+            return false
         }
     }
 
@@ -98,13 +100,13 @@ const App = () => {
         try {
             const response = await blogService.updateLikes(blog)
             setBlogs(blogs.map(blog => blog.id != response.id ? blog : response))
-            return response 
+            return response
         } catch (error) {
             console.log(error)
         }
     }
 
-    const displayDeleteButton = blogObject => {
+    const displayButton = blogObject => {
         if (!user) {
             return false
         }
@@ -123,6 +125,7 @@ const App = () => {
             <div>
                 <Link style={{ padding: 5 }} to='/'>blogs</Link>
                 {!user && <Link style={{ padding: 5 }} to='/login'>login</Link>}
+                {user && <Link style={{ padding: 5 }} to='/create'>new blog</Link>}
                 {user && <button type='button' onClick={handleLogout}>log out</button>}
             </div>
             <Notification message={message} type={messageType} />
@@ -137,11 +140,15 @@ const App = () => {
                     />}
                 />
                 <Route
+                    path='/create'
+                    element={<CreateBlogForm createBlog={addBlog} />}
+                />
+                <Route
                     path='/:id'
                     element={<Blog
                         blog={blog}
                         removeBlog={deleteBlog}
-                        displayDelete={displayDeleteButton}
+                        displayButton={displayButton}
                         updateLikes={updateLikes}
                     />}
                 />
