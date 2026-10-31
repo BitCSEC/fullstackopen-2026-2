@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blog, removeBlog, displayDelete, updateLikes }) => {
     const [visible, setVisible] = useState(false)
@@ -6,6 +7,8 @@ const Blog = ({ blog, removeBlog, displayDelete, updateLikes }) => {
 
     const hideWhenVisible = { display: visible ? 'none' : '' }
     const showWhenVisible = { display: visible ? '' : 'none' }
+
+    const navigate = useNavigate()
 
     const toggleVisibility = () => {
         setVisible(!visible)
@@ -31,18 +34,13 @@ const Blog = ({ blog, removeBlog, displayDelete, updateLikes }) => {
     }
 
     return (
-        <div style={blogStyle}>
-            <div>
-                {currentBlog.title} {currentBlog.author}&nbsp;
-                <button style={hideWhenVisible} onClick={toggleVisibility}>view</button>
-                <button style={showWhenVisible} onClick={toggleVisibility}>hide</button>
-                <div className='extra'style={showWhenVisible}>
-                    {currentBlog.url}<br />
-                    likes {currentBlog.likes} <button onClick={addLike}>like</button><br />
-                    {currentBlog.user.name}<br />
-                    {displayDelete(blog) && <button onClick={deleteBlog}>delete</button> }
-                </div>
-            </div>
+        <div>
+            <h2>{currentBlog.title} - {currentBlog.author}</h2>
+            <a href={currentBlog.url} target='_blank' rel='noopener noreferrer'>{currentBlog.url}</a><br />
+            likes {currentBlog.likes}&nbsp;
+            {displayDelete(currentBlog) && <button onClick={addLike}>like</button>}<br />
+            Added by {currentBlog.user.name}<br />
+            {displayDelete(currentBlog) && <button onClick={deleteBlog}>delete</button>}
         </div>
     )
 }

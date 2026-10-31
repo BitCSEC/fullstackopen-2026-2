@@ -7,7 +7,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-import { Link, Routes, Route, useNavigate } from 'react-router-dom'
+import { Link, Routes, Route, useNavigate, useMatch } from 'react-router-dom'
 import BlogList from './components/BlogList'
 
 const App = () => {
@@ -17,7 +17,7 @@ const App = () => {
     const [user, setUser] = useState(null)
     const [message, setMessage] = useState(null)
     const [messageType, setMessageType] = useState(null)
-    
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -85,7 +85,7 @@ const App = () => {
     const deleteBlog = async (blogObject) => {
         if (window.confirm(`Remove blog ${blogObject.title}`)) {
             try {
-                const response = await blogService.deleteBlog(blogObject)
+                await blogService.deleteBlog(blogObject)
                 setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
             }
             catch (error) {
@@ -96,7 +96,9 @@ const App = () => {
 
     const updateLikes = async (blog) => {
         try {
-            return await blogService.updateLikes(blog)
+            const response = await blogService.updateLikes(blog)
+            setBlogs(blogs.map(blog => blog.id != response.id ? blog : response))
+            return response 
         } catch (error) {
             console.log(error)
         }
@@ -109,23 +111,12 @@ const App = () => {
         return blogObject.user.username === user.username
     }
 
-
-    // if (!user) {
-    //     return (
-    //         <div>
-    //             <Notification message={message} type={messageType} />
-    //             <LoginForm
-    //                 username={username}
-    //                 password={password}
-    //                 handlers={[handleLogin, setUsername, setPassword]}
-    //             />
-    //         </div>
-    //     )
-    // }
-
     const sortedBlogs = blogs.toSorted(
         (a, b) => a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
     )
+
+    const match = useMatch('/:id')
+    const blog = match ? blogs.find(blog => blog.id === match.params.id) : null
 
     return (
         <div>
@@ -136,8 +127,24 @@ const App = () => {
             </div>
             <Notification message={message} type={messageType} />
             <Routes>
-                <Route path='/' element={<BlogList blogs={sortedBlogs} removeBlog={deleteBlog} displayDelete={displayDeleteButton} updateLikes={updateLikes} />} />
-                <Route path='/login' element={<LoginForm username={username} password={password} handlers={[handleLogin, setUsername, setPassword]} />} />
+                <Route path='/' element={<BlogList blogs={sortedBlogs} />} />
+                <Route
+                    path='/login'
+                    element={<LoginForm
+                        username={username}
+                        password={password}
+                        handlers={[handleLogin, setUsername, setPassword]}
+                    />}
+                />
+                <Route
+                    path='/:id'
+                    element={<Blog
+                        blog={blog}
+                        removeBlog={deleteBlog}
+                        displayDelete={displayDeleteButton}
+                        updateLikes={updateLikes}
+                    />}
+                />
             </Routes>
         </div>
         // <div>
