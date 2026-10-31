@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
+import { Link, Routes, Route, useNavigate, useMatch } from 'react-router-dom'
+
+import blogService from './services/blogs'
+import loginService from './services/login'
+
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
-
-import { Link, Routes, Route, useNavigate, useMatch } from 'react-router-dom'
 import BlogList from './components/BlogList'
+
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -154,20 +155,7 @@ const App = () => {
                 />
             </Routes>
         </div>
-        // <div>
-        //     <Notification message={message} type={messageType} />
-        //     <h2>blogs</h2>
-        //     <p>
-        //         {user.name} logged in
-        //         <button type='button' onClick={handleLogout}>log out</button>
-        //     </p>
-        //     <Togglable showLabel="create new blog">
-        //         <CreateBlogForm createBlog={addBlog} />
-        //     </Togglable>
-        //     {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} displayDelete={displayDeleteButton} updateLikes={updateLikes} />)}
-        // </div>
     )
-
 }
 
 export default App
