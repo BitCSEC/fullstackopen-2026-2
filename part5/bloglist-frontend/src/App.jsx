@@ -7,6 +7,9 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { Link, Routes, Route, useNavigate } from 'react-router-dom'
+import BlogList from './components/BlogList'
+
 const App = () => {
     const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
@@ -14,6 +17,8 @@ const App = () => {
     const [user, setUser] = useState(null)
     const [message, setMessage] = useState(null)
     const [messageType, setMessageType] = useState(null)
+    
+    const navigate = useNavigate()
 
     useEffect(() => {
         blogService.getAll().then(blogs =>
@@ -38,6 +43,7 @@ const App = () => {
             window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
             blogService.setToken(user.token)
             setUser(user)
+            navigate('/')
             setUsername('')
             setPassword('')
         } catch {
@@ -53,6 +59,7 @@ const App = () => {
     const handleLogout = () => {
         setUser(null)
         window.localStorage.removeItem('loggedBlogappUser')
+        navigate('/')
     }
 
     const addBlog = async (blogObject) => {
@@ -95,22 +102,26 @@ const App = () => {
         }
     }
 
-    const displayDeleteButton = blogObject => { 
-        return blogObject.user.username === user.username }
-
-
-    if (!user) {
-        return (
-            <div>
-                <Notification message={message} type={messageType} />
-                <LoginForm
-                    username={username}
-                    password={password}
-                    handlers={[handleLogin, setUsername, setPassword]}
-                />
-            </div>
-        )
+    const displayDeleteButton = blogObject => {
+        if (!user) {
+            return false
+        }
+        return blogObject.user.username === user.username
     }
+
+
+    // if (!user) {
+    //     return (
+    //         <div>
+    //             <Notification message={message} type={messageType} />
+    //             <LoginForm
+    //                 username={username}
+    //                 password={password}
+    //                 handlers={[handleLogin, setUsername, setPassword]}
+    //             />
+    //         </div>
+    //     )
+    // }
 
     const sortedBlogs = blogs.toSorted(
         (a, b) => a.likes > b.likes ? -1 : a.likes < b.likes ? 1 : 0
@@ -118,17 +129,29 @@ const App = () => {
 
     return (
         <div>
+            <div>
+                <Link style={{ padding: 5 }} to='/'>blogs</Link>
+                {!user && <Link style={{ padding: 5 }} to='/login'>login</Link>}
+                {user && <button type='button' onClick={handleLogout}>log out</button>}
+            </div>
             <Notification message={message} type={messageType} />
-            <h2>blogs</h2>
-            <p>
-                {user.name} logged in
-                <button type='button' onClick={handleLogout}>log out</button>
-            </p>
-            <Togglable showLabel="create new blog">
-                <CreateBlogForm createBlog={addBlog} />
-            </Togglable>
-            {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} displayDelete={displayDeleteButton} updateLikes={updateLikes} />)}
+            <Routes>
+                <Route path='/' element={<BlogList blogs={sortedBlogs} removeBlog={deleteBlog} displayDelete={displayDeleteButton} updateLikes={updateLikes} />} />
+                <Route path='/login' element={<LoginForm username={username} password={password} handlers={[handleLogin, setUsername, setPassword]} />} />
+            </Routes>
         </div>
+        // <div>
+        //     <Notification message={message} type={messageType} />
+        //     <h2>blogs</h2>
+        //     <p>
+        //         {user.name} logged in
+        //         <button type='button' onClick={handleLogout}>log out</button>
+        //     </p>
+        //     <Togglable showLabel="create new blog">
+        //         <CreateBlogForm createBlog={addBlog} />
+        //     </Togglable>
+        //     {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} removeBlog={deleteBlog} displayDelete={displayDeleteButton} updateLikes={updateLikes} />)}
+        // </div>
     )
 
 }
