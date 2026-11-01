@@ -1,10 +1,13 @@
-import { TextField, Button } from '@mui/material'
+import { TextField, Button, Typography, Card, CardContent } from '@mui/material'
 
 const LoginForm = ({ username, password, handlers }) => {
     const [handleLogin, setUsername, setPassword] = handlers
     return (
-        <div>
-            <h2>log in to application</h2>
+        <Card sx={{ marginTop: 5, mx: 'auto' }}>
+        <CardContent>
+            <Typography variant='h4' component='h2'>
+                log in to to application
+            </Typography>
             <form onSubmit={handleLogin}>
                 <div>
                     <TextField
@@ -25,7 +28,8 @@ const LoginForm = ({ username, password, handlers }) => {
                     <Button type='submit' variant='contained' style={{ marginTop: 10 }}>login</Button>
                 </div>
             </form>
-        </div>
+        </CardContent>
+        </Card>
     )
 }
 

@@ -15,7 +15,7 @@ const loginUser = async (page, username, password) => {
 }
 
 const logoutUser = async (page) => {
-    await page.getByRole('button', { name: 'log out' }).click()
+    await page.getByRole('button', { name: 'logout' }).click()
 }
 
 module.exports = { addBlog, loginUser, logoutUser }
