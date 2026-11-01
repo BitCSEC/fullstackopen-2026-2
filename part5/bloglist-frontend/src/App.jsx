@@ -10,6 +10,7 @@ import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
 import BlogList from './components/BlogList'
 
+import { Container, AppBar, Button, Toolbar } from '@mui/material'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -108,7 +109,7 @@ const App = () => {
         }
     }
 
-    const displayButton = (blogObject, alwaysDisplay=false) => {
+    const displayButton = (blogObject, alwaysDisplay = false) => {
         if (!user) {
             return false
         }
@@ -127,40 +128,46 @@ const App = () => {
     const match = useMatch('/:id')
     const blog = match ? blogs.find(blog => blog.id === match.params.id) : null
 
+    const hoverStyle = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
+
     return (
-        <div>
+        <Container>
+            <AppBar position='static'>
+                <Toolbar>
+                    <Button color='inherit' component={Link} to='/' sx={hoverStyle}>blogs</Button>
+                    {!user && <Button color='inherit' component={Link} to='/login' sx={hoverStyle}>login</Button>}
+                    {user && <Button color='inherit' component={Link} to='/create' sx={hoverStyle}>new blog</Button>}
+                    {user && <Button color='inherit' onClick={handleLogout} sx={hoverStyle}>logout</Button>}
+                </Toolbar>
+            </AppBar>
             <div>
-                <Link style={{ padding: 5 }} to='/'>blogs</Link>
-                {!user && <Link style={{ padding: 5 }} to='/login'>login</Link>}
-                {user && <Link style={{ padding: 5 }} to='/create'>new blog</Link>}
-                {user && <button type='button' onClick={handleLogout}>log out</button>}
+                <Notification message={message} type={messageType} />
+                <Routes>
+                    <Route path='/' element={<BlogList blogs={sortedBlogs} />} />
+                    <Route
+                        path='/login'
+                        element={<LoginForm
+                            username={username}
+                            password={password}
+                            handlers={[handleLogin, setUsername, setPassword]}
+                        />}
+                    />
+                    <Route
+                        path='/create'
+                        element={<CreateBlogForm createBlog={addBlog} />}
+                    />
+                    <Route
+                        path='/:id'
+                        element={<Blog
+                            blog={blog}
+                            removeBlog={deleteBlog}
+                            displayButton={displayButton}
+                            updateLikes={updateLikes}
+                        />}
+                    />
+                </Routes>
             </div>
-            <Notification message={message} type={messageType} />
-            <Routes>
-                <Route path='/' element={<BlogList blogs={sortedBlogs} />} />
-                <Route
-                    path='/login'
-                    element={<LoginForm
-                        username={username}
-                        password={password}
-                        handlers={[handleLogin, setUsername, setPassword]}
-                    />}
-                />
-                <Route
-                    path='/create'
-                    element={<CreateBlogForm createBlog={addBlog} />}
-                />
-                <Route
-                    path='/:id'
-                    element={<Blog
-                        blog={blog}
-                        removeBlog={deleteBlog}
-                        displayButton={displayButton}
-                        updateLikes={updateLikes}
-                    />}
-                />
-            </Routes>
-        </div>
+        </Container>
     )
 }
 
