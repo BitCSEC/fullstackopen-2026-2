@@ -22,6 +22,7 @@ describe('Blog app', () => {
     })
 
     test('Login form is shown', async ({ page }) => {
+        await page.getByRole('link', { name: 'login' }).click()
         await expect(page.getByLabel('username')).toBeVisible()
         await expect(page.getByLabel('password')).toBeVisible()
     })
@@ -29,7 +30,7 @@ describe('Blog app', () => {
     describe('Login', () => {
         test('succeds with correct credentials', async ({ page }) => {
             await loginUser(page, 'admin', '12345')
-            await expect(page.getByText('Hernán logged in')).toBeVisible()
+            await expect(page.getByRole('heading', 'blogs')).toBeVisible()
         })
 
         test('fails with wrong credentials', async ({ page }) => {
@@ -44,28 +45,26 @@ describe('Blog app', () => {
         })
 
         test('a new blog can be created', async ({ page }) => {
-            await page.getByRole('button', { name: 'create new blog' }).click()
             await addBlog(page, 'Título', 'Autor', 'http://localhost:5173/Ejemplo')
-            await expect(page.getByText('Título Autor')).toBeVisible()
+            await expect(page.getByText('Título by Autor')).toBeVisible()
         })
 
         describe('and there are some blogs', () => {
             beforeEach(async ({ page }) => {
-                await page.getByRole('button', { name: 'create new blog' }).click()
                 await addBlog(page, 'Título', 'Autor', 'http://localhost:5173/Ejemplo')
                 await addBlog(page, 'Title', 'Author', 'http://localhost:5173/Example')
             })
 
             test('they can be liked', async ({ page }) => {
-                const first = page.getByText('Título Autor')
-                await first.getByRole('button', { name: 'view' }).click()
-                await first.getByRole('button', { name: 'like' }).click()
-                await expect(first.getByText('likes 1')).toBeVisible()
+                await page.getByRole('link', { name: 'Título by Autor' }).click()
+                await page.getByRole('button', { name: 'like' }).click()
+                await expect(page.getByText('likes 1')).toBeVisible()
 
-                const second = page.getByText('Title Author')
-                await second.getByRole('button', { name: 'view' }).click()
-                await second.getByRole('button', { name: 'like' }).click()
-                await expect(second.getByText('likes 1')).toBeVisible()
+                await page.getByRole('link', { name: 'blogs' }).click()
+
+                await page.getByRole('link', { name: 'Title by Author' }).click()
+                await page.getByRole('button', { name: 'like' }).click()
+                await expect(page.getByText('likes 1')).toBeVisible()
 
             })
 
@@ -75,27 +74,26 @@ describe('Blog app', () => {
                     await dialog.accept()
                 })
 
-                await page.getByText('Título Autor').getByRole('button', { name: 'view' }).click()
+                await page.getByRole('link', { name: 'Título by Autor' }).click()
                 await page.getByRole('button', { name: 'delete' }).click()
-                await expect(page.getByText('Título Autor')).toBeHidden()
+                await expect(page.getByText('Título by Autor')).toBeHidden()
 
-                await page.getByText('Title Author').getByRole('button', { name: 'view' }).click()
+                await page.getByRole('link', { name: 'Title by Author' }).click()
                 await page.getByRole('button', { name: 'delete' }).click()
-                await expect(page.getByText('Title Author')).toBeHidden()
+                await expect(page.getByText('Title by Author')).toBeHidden()
             })
 
             test('another user cannot delete them', async ({ page }) => {
                 await logoutUser(page)
                 await loginUser(page, 'user', '67890')
 
-                const first = page.getByText('Título Autor')
-                await first.getByRole('button', { name: 'view' }).click()
-                await expect(first.getByRole('button', { name: 'delete' })).toBeHidden()
+                await page.getByRole('link', { name: 'Título by Autor' }).click()
+                await expect(page.getByRole('button', { name: 'delete' })).toBeHidden()
 
-                const second = page.getByText('Title Author')
-                await second.getByRole('button', { name: 'view' }).click()
-                await expect(first.getByRole('button', { name: 'delete' })).toBeHidden()
+                await page.getByRole('link', { name: 'blogs' }).click()
 
+                await page.getByRole('link', { name: 'Title by Author' }).click()
+                await expect(page.getByRole('button', { name: 'delete' })).toBeHidden()
             })
             // TODO: ejercicio 5.23
         })
