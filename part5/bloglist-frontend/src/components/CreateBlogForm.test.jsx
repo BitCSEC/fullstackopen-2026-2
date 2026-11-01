@@ -1,12 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import CreateBlogForm from './CreateBlogForm'
+import { MemoryRouter } from 'react-router-dom'
 
 describe('CreateBlogForm behaviour', () => {
     test('event handler is called when new blog is created', async () => {
         const mockHandler = vi.fn()
 
-        render(<CreateBlogForm createBlog={mockHandler} />)
+        render(
+            <MemoryRouter>
+                <CreateBlogForm createBlog={mockHandler} />
+            </MemoryRouter>
+        )
 
         const user = userEvent.setup()
 

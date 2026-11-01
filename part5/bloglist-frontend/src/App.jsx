@@ -108,10 +108,15 @@ const App = () => {
         }
     }
 
-    const displayButton = blogObject => {
+    const displayButton = (blogObject, alwaysDisplay=false) => {
         if (!user) {
             return false
         }
+
+        if (alwaysDisplay) {
+            return true
+        }
+
         return blogObject.user.username === user.username
     }
 
