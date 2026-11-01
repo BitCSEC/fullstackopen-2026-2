@@ -89,6 +89,7 @@ const App = () => {
         if (window.confirm(`Remove blog ${blogObject.title}`)) {
             try {
                 await blogService.deleteBlog(blogObject)
+                navigate('/')
                 setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
             }
             catch (error) {

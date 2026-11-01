@@ -9,6 +9,10 @@ const Blog = ({ blog, removeBlog, displayButton, updateLikes }) => {
         await removeBlog(blog)
     }
 
+    if (!blog) {
+        return null
+    }
+
     return (
         <div>
             <h2>{blog.title} - {blog.author}</h2>
