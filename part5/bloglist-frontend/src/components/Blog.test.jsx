@@ -150,6 +150,9 @@ describe('Blog component behaviour', () => {
         expect(deleteButton).toBeVisible()
     })
 
+    // This test lost it's purpose after the changes to the frontend in part 5e.
+    // However, I will try to implement a test with a similar spirit to this one in App.test.jsx
+    //
     // test('clicking view button show url and likes', async () => {
     //     const mockRemove = vi.fn()
     //     const mockDisplay = vi.fn()
