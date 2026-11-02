@@ -18,6 +18,7 @@ describe('Blog app', () => {
                 password: '67890'
             }
         })
+        await request.post('http://localhost:5173/api/testing/populate')
         await page.goto('http://localhost:5173')
     })
 
@@ -95,7 +96,25 @@ describe('Blog app', () => {
                 await page.getByRole('link', { name: 'Title by Author' }).click()
                 await expect(page.getByRole('button', { name: 'delete' })).toBeHidden()
             })
-            // TODO: ejercicio 5.23
+        })
+    })
+    describe('Blogs are sorted', () => {
+        beforeEach(async ({ page }) => {
+            await loginUser(page, 'admin', '12345')
+        })
+
+        test('in descending order number of likes', async ({ page }) => {
+            await page.getByRole('listitem').first().waitFor({ state: 'visible' });
+            const likes = []
+
+            for (const text of await page.getByRole('listitem').allTextContents()) {
+                await page.getByRole('link', { name: text }).click()
+                const blogLikes = await page.getByText(/likes \d+/).textContent()
+                likes.push(Number(blogLikes.match(/\d+/)[0]))
+                await page.goBack()
+            }
+
+            expect(likes).toEqual(likes.toSorted((a, b) => b - a))
         })
     })
 })
